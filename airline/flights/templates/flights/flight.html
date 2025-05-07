@@ -1,0 +1,45 @@
+<h1>Flight {{ flight.id }}</h1>
+
+<ul>
+  <li>Origin: {{ flight.origin }}</li>
+  <li>Destination: {{ flight.destination }}</li>
+  <li>Duration: {{ flight.duration }} minutes</li>
+</ul>
+
+<h2>Passengers</h2>
+<ul>
+  {% for passenger in passengers %}
+    <li>{{ passenger.first }} {{ passenger.last }}</li>
+  {% empty %}
+    <li>No passengers yet.</li>
+  {% endfor %}
+</ul>
+
+<h2>Non-passengers</h2>
+<ul>
+  {% for non_passenger in non_passengers %}
+    <li>{{ non_passenger.first }} {{ non_passenger.last }}</li>
+  {% empty %}
+    <li>Everyone is already on this flight!</li>
+  {% endfor %}
+</ul>
+
+<h3>Add Passenger</h3>
+<form action="{% url 'book' flight.id %}" method="post">
+  {% csrf_token %}
+  <select name="passenger">
+    {% for person in non_passengers %}
+      <option value="{{ person.id }}">{{ person.first }} {{ person.last }}</option>
+    {% endfor %}
+  </select>
+  <input type="submit" value="Add Passenger">
+</form>
+
+<p>
+  {% if user.is_authenticated %}
+    Logged in as {{ user.username }} |
+    <a href="{% url 'logout' %}">Log out</a>
+  {% else %}
+    <a href="{% url 'login' %}">Log in</a>
+  {% endif %}
+</p>

@@ -1,0 +1,20 @@
+{% extends "flights/base.html" %}
+
+{% block content %}
+<h1>Book Flight {{ flight.id }}</h1>
+
+<p><strong>Flight:</strong> {{ flight.origin }} to {{ flight.destination }}</p>
+
+<h3>Select a Passenger</h3>
+
+<form method="post">
+    {% csrf_token %}
+    <select name="passenger">
+        {% for person in non_passengers %}
+            <option value="{{ person.id }}">{{ person.first }} {{ person.last }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" value="Book Flight">
+</form>
+
+{% endblock %}
